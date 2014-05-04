@@ -10,15 +10,15 @@ import MySQLdb
 # sae.const.MYSQL_HOST_S  # 从库域名（只读）
 
 def select(cursor, selectQueryString, param):
-	try:
-		cursor.execute(selectQueryString, param)
-		return cursor.fetchall()
-	except MySQLdb.Error,e:
-	     pass
+    try:
+        cursor.execute(selectQueryString, param)
+        return cursor.fetchall()
+    except MySQLdb.Error,e:
+        pass
 
 def execute(cursor, QueryString, param):
-	try:
-		n = cursor.execute(QueryString, param)
-		return n
-	except MySQLdb.Error,e:
-	     pass
+    try:
+        n = cursor.execute(QueryString, param)
+        return n
+    except MySQLdb.Error,e:
+        pass

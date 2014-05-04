@@ -16,7 +16,19 @@ class WeixinInterface:
         self.render = web.template.render(self.templates_root)
      
     def GET(self):
-        return ("get ok")
+        data = web.input()      # 获取输入参数  
+        signature = data.signature  
+        timestamp = data.timestamp  
+        nonce = data.nonce  
+        echostr = data.echostr  
+        token="dorabmon"             # 自己的token  
+        list=[token,timestamp,nonce]    # 字典序排序  
+        list.sort()  
+        sha1=hashlib.sha1()             # sha1加密算法  
+        map(sha1.update, list)  
+        hashcode=sha1.hexdigest()  
+        if hashcode == signature:       # 如果是来自微信的请求，则回复echostr  
+            return echostr              # print "true"  
 
     def POST(self):
         str_xml=web.data()
@@ -28,7 +40,7 @@ class WeixinInterface:
         if msgType == 'event':
             event=xml.find("Event").text
             if event == 'subscribe':
-                return self.render.reply_text(fromUser,toUser,int(time.time()), u'欢迎关注。输入自己的battlenet TAG查询英雄。开发阶段，功能有限，敬请谅解。如有建议或意见，请直接留言')
+                return self.render.reply_text(fromUser,toUser,int(time.time()), u'欢迎关注。输入自己的battlenet TAG查询英雄。输入help或者?获得帮助。开发阶段，功能有限，敬请谅解。')
         elif msgType == 'text':
             try:
                 content=xml.find("Content").text
@@ -36,14 +48,24 @@ class WeixinInterface:
                 return
             finally:
                 pass
+        # 对content进行trim
+        content = content.strip()
         # 对content进行分析，如果是battle net tag，则保存，并显示英雄列表。
         # 如果是数字，则去查询具体英雄
         commandType = rex.commando(content)
-        if commandType == 1 :
+        sayString = ''
+        if commandType == 900 :
+            sayString = cmd.cmdHelp()
+        elif commandType == 901 :
+            sayString = cmd.cmdHelpEquip()
+        elif commandType == 1 :
             sayString = cmd.cmdBntag(fromUser, content)
-            return self.render.reply_text(fromUser,toUser,int(time.time()), sayString)
         elif commandType == 2 :
             sayString = cmd.cmdHeroSeq(fromUser, content)
-            return self.render.reply_text(fromUser,toUser,int(time.time()), sayString)
+        elif commandType == 3 :
+            sayString = cmd.cmdHeroSkill(fromUser)
+        elif commandType > 100 and commandType < 200 :
+            sayString = cmd.cmdHeroItem(fromUser, commandType)
         else :
-            return self.render.reply_text(fromUser,toUser,int(time.time()), u'我不知道您想做什么操作。目前只支持输入battle net tag查询英雄。然后输入编号查询英雄状态。如果您想要留言，那已经收到。')
+            sayString = u'恕在下未能领会大侠的神意图。这位可敬的涅法雷姆，您可以输入help或者?便可知在下能为您做些什么。非常愿意为您效劳。'
+        return self.render.reply_text(fromUser,toUser,int(time.time()), sayString)

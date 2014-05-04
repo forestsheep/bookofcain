@@ -28,7 +28,24 @@ def getHeroesSeq(cursor, bntag, bnRegion, heroNo):
     return rows
 
 def selectHero(cursor, weixin_id,seqNo):
-    sql = "SELECT `heroes`.`battlenet_tag`,`bn_region`,`hero` FROM `heroes`,`last_bntag` WHERE `heroes`.`battlenet_tag`=`last_bntag`.`battlenet_tag` and `weixin_id` = %s and `seq_id`= %s"
+    sql = "select `heroes`.`battlenet_tag`,`bn_region`,`hero` from `heroes`,`last_bntag` where `heroes`.`battlenet_tag`=`last_bntag`.`battlenet_tag` and `weixin_id` = %s and `seq_id`= %s"
     prm = (weixin_id,seqNo)
+    rows = mysqlconn.select(cursor, sql, prm)
+    bntag = rows[0][0]
+    region = rows[0][1]
+    heroid = rows[0][2]
+
+    sql1 = "update `heroes` set `last_visited` = 0 where `battlenet_tag` = %s"
+    prm1 = (bntag)
+    mysqlconn.execute(cursor, sql1, prm1)
+
+    sql2 = "update `heroes` set `last_visited` = 1 where `battlenet_tag` = %s and `bn_region` = %s and `hero` = %s"
+    prm2 = (bntag, region, heroid)
+    mysqlconn.execute(cursor, sql2, prm2)
+    return rows
+
+def selectLastHero(cursor, weixin_id):
+    sql = "select `heroes`.`battlenet_tag`,`heroes`.`bn_region`,`heroes`.`hero` from `heroes`,`last_bntag` where `last_bntag`.`weixin_id` = %s and `last_bntag`.`battlenet_tag` = `heroes`.`battlenet_tag` and `heroes`.`last_visited`"
+    prm =(weixin_id)
     rows = mysqlconn.select(cursor, sql, prm)
     return rows

@@ -20,3 +20,25 @@ def echoHeroStatus(statusDict):
         line = zhname + ":" + str(statusDict[key])
         rtn = stringutil.appendLines(rtn, line)
     return rtn
+
+def getItemKey(itemid):
+    itemDict = {
+        '101':'head',
+        '102':'neck',
+        '103':'shoulders',
+        '104':'torso',
+        '105':'bracers',
+        '106':'hands',
+        '107':'leftFinger',
+        '108':'rightFinger',
+        '109':'mainHand',
+        '110':'offHand',
+        '111':'waist',
+        '112':'legs',
+        '113':'feet'
+    }
+    itemString = str(itemid)
+    if itemString in itemDict :
+        return itemDict[itemString]
+    else :
+        return None
