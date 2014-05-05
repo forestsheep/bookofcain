@@ -32,11 +32,11 @@ def commando(command):
     matchSkill = ptnSkill.match(command)
     if matchSkill:
         return 3
-    ptnItemHead = re.compile(ur'^(?i)head$|^头部{0,1}$|^頭$|^帽子{0,1}$')
+    ptnItemHead = re.compile(ur'^(?i)head$|^头部{0,1}$|^头{0,1}盔$|^頭$|^帽子{0,1}$')
     matchItemHead = ptnItemHead.match(command)
     if matchItemHead:
         return 101
-    ptnItemNeck = re.compile(ur'^(?i)neck(lace){0,1}$|^(?i)amulet$|^护身符$|^项链{0,1}$|^头{0,1}颈部{0,1}$|^脖子{0,1}$')
+    ptnItemNeck = re.compile(ur'^(?i)neck(lace){0,1}$|^(?i)amulet$|^护身{0,1}符$|^项链{0,1}$|^头{0,1}颈部{0,1}$|^脖子{0,1}$')
     matchItemNeck = ptnItemNeck.match(command)
     if matchItemNeck:
         return 102
@@ -44,7 +44,7 @@ def commando(command):
     matchItemShoulder = ptnItemShoulder.match(command)
     if matchItemShoulder:
         return 103
-    ptnItemTorso = re.compile(ur'^(?i)torso$|^(?i)chest$|^cloth(es){0,1}$|^胸甲{0,1}部{0,1}$|^上{0,1}衣服{0,1}$')
+    ptnItemTorso = re.compile(ur'^(?i)torso$|^(?i)chest$|^cloth(es){0,1}$|^(?i)coat$|^躯干$|^胸甲{0,1}部{0,1}$|^上{0,1}衣服{0,1}$')
     matchItemTorso = ptnItemTorso.match(command)
     if matchItemTorso:
         return 104
@@ -52,7 +52,7 @@ def commando(command):
     matchItemBracers = ptnItemBracers.match(command)
     if matchItemBracers:
         return 105
-    ptnItemHands = re.compile(ur'^(?i)hands{0,1}$|^(?i)gloves{0,1}$|^手套$')
+    ptnItemHands = re.compile(ur'^(?i)hands{0,1}$|^(?i)gloves{0,1}$|^手套{0,1}$')
     matchItemHands = ptnItemHands.match(command)
     if matchItemHands:
         return 106

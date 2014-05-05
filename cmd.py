@@ -15,11 +15,12 @@ def cmdHelp():
 
 def cmdHelpEquip():
     rtnString = u'各部位装备查询命令如下：\n'
-    rtnString = rtnString + u'头部：head 头 头部 帽 帽子\n'
-    rtnString = rtnString + u'颈部：neck necklace amulet 项 项链 护身符 颈 头颈 颈部 脖 脖子\n'
+    rtnString = rtnString + u'头部：head 头 头部 盔 头盔 帽 帽子\n'
+    rtnString = rtnString + u'颈部：neck necklace amulet 项 项链 护符 护身符 颈 头颈 颈部 脖 脖子\n'
     rtnString = rtnString + u'肩膀：shoulder shoulders 肩 护肩 肩膀 肩甲\n'
-    rtnString = rtnString + u'胸部：torso chest cloth clothes 胸 胸部 胸甲 衣 上衣 衣服\n'
+    rtnString = rtnString + u'胸部：torso chest cloth clothes 躯干 胸 胸部 胸甲 衣 上衣 衣服\n'
     rtnString = rtnString + u'腕部：bracers 腕 护腕 腕部 手腕\n'
+    rtnString = rtnString + u'手：hand hands golve golves 手 手套\n'
     rtnString = rtnString + u'左手指：leftfinger finger1 feftring ring1 手指 左手指 左指 手指1 左手戒指 左手戒 左戒指 左戒 戒指 戒指1 戒 戒1\n'
     rtnString = rtnString + u'右手指：rightfinger finger2 rightring ring2 右指 右手指 手指2 右手戒指 右手戒 右戒指 右戒 戒指2 戒2\n'
     rtnString = rtnString + u'主手：mainhand hand1 weapon weapon1 主手 武器1\n'
