@@ -85,4 +85,10 @@ def commando(command):
     if matchItemFeet:
         return 113
     return -1
+
+def knownBadCommand(command):
+    ptnBigSharp = re.compile(ur'(?u)\w+＃\d+')
+    matchBigSharp = ptnBigSharp.match(command)
+    if matchBigSharp:
+        return u'您很有可能输入的是全角的#，导致无法检索到正确的账号信息。'
     
