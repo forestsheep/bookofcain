@@ -6,6 +6,7 @@ import json
 import sqlquery
 import logsql
 import herostatus
+import httperror
 
 def echoHeroDetail(battlenettagString, region, hreoid):
     try:
@@ -33,23 +34,30 @@ def echoHeroDetail(battlenettagString, region, hreoid):
 
 def echoYourHeroes(cursor, battlenettagString):
     # 先删除现有英雄
-    error = sqlquery.delHeroes(cursor, battlenettagString)
-    rtnString = echoYourHeroesByServer(cursor, battlenettagString, 'tw', u'亚服')
-    usString = echoYourHeroesByServer(cursor, battlenettagString, 'us', u'美服')
-    rtnString = stringutil.appendLines(rtnString, usString)
-    euString = echoYourHeroesByServer(cursor, battlenettagString, 'eu', u'欧服')
-    rtnString = stringutil.appendLines(rtnString, euString)
-    if rtnString != None and rtnString != '':
+    error = sqlquery_t.delHeroes(cursor, battlenettagString)
+    rtnString = ''
+    try:
+        rtnString = echoYourHeroesByServer(cursor, battlenettagString, 'tw', u'亚服')
+        usString = echoYourHeroesByServer(cursor, battlenettagString, 'us', u'美服')
+        rtnString = stringutil.appendLines(rtnString, usString)
+        euString = echoYourHeroesByServer(cursor, battlenettagString, 'eu', u'欧服')
+        rtnString = stringutil.appendLines(rtnString, euString)
+    except httperror.HttpError, he:
+        return u'battle.net繁忙，请稍后再试。'
+    if rtnString != '':
         rtnString = stringutil.appendLines(rtnString, u'输入编号查询英雄状态')
     else:
         rtnString = u'没找到您的账号，请确认输入的是正确的战网TAG'
     return rtnString
 
 def echoYourHeroesByServer(cursor, battlenettagString, region, regionName):
+    jsonString = ''
     try:
         httpClient = httplib.HTTPConnection(region + '.battle.net', 80, timeout=30)
         httpClient.request('GET','/api/d3/profile/' + battlenettagString.replace('#','-') + '/')
         response = httpClient.getresponse()
+        if response.status != 200:
+            raise httperror.HttpError('not 200')
         jsonString = response.read()
         resultJson = json.loads(jsonString)
         errorcode = resultJson.get(u'code')
@@ -64,6 +72,8 @@ def echoYourHeroesByServer(cursor, battlenettagString, region, regionName):
         elif errorcode == u'NOTFOUND':
             return ''
         return rtnString
+    except httperror.HttpError, he:
+        raise he
     except Exception, e:
         logsql.writeLog(cursor, 'echoYourHeroesByServer Error:' + str(e))
         pass
@@ -76,6 +86,8 @@ def echoHeroSkills(battlenettagString, region, hreoid):
         httpClient = httplib.HTTPConnection(region + '.battle.net', 80, timeout=30)
         httpClient.request('GET','/api/d3/profile/' + battlenettagString.replace('#','-') + '/hero/' + hreoid)
         response = httpClient.getresponse()
+        if response.status != 200:
+            raise httperror.HttpError('not 200')
         jsonString = response.read()
         resultJson = json.loads(jsonString)
         heroname = resultJson.get(u'name')
@@ -97,6 +109,8 @@ def echoHeroSkills(battlenettagString, region, hreoid):
                 skillDict = eleDict[u'skill']
                 rtnString = stringutil.appendLines(rtnString, skillDict[u'name'])
         return rtnString
+    except httperror.HttpError, he:
+        return u'battle.net繁忙，请稍后再试。'
     except KeyError, ke:
         return rtnString
     except Exception, e:
@@ -111,6 +125,8 @@ def echoHeroItem(battlenettagString, region, hreoid, itemId):
         httpClient = httplib.HTTPConnection(region + '.battle.net', 80, timeout=30)
         httpClient.request('GET','/api/d3/profile/' + battlenettagString.replace('#','-') + '/hero/' + hreoid)
         responseHero = httpClient.getresponse()
+        if responseHero.status != 200:
+            raise httperror.HttpError('not 200')
         jsonHeroString = responseHero.read()
         resultHeroJson = json.loads(jsonHeroString)
         itemsDict = resultHeroJson[u'items']
@@ -119,6 +135,8 @@ def echoHeroItem(battlenettagString, region, hreoid, itemId):
         
         httpClient.request('GET','/api/d3/data/' + tooptipString)
         responseItem = httpClient.getresponse()
+        if responseItem.status != 200:
+            raise httperror.HttpError('not 200')
         jsonItemString = responseItem.read()
         resultItemJson = json.loads(jsonItemString)
         rtnString = resultItemJson[u'name']
@@ -201,6 +219,8 @@ def echoHeroItem(battlenettagString, region, hreoid, itemId):
             flavorString = resultItemJson[u'flavorText']
             rtnString = stringutil.appendLines(rtnString, flavorString)
         return rtnString
+    except httperror.HttpError, he:
+        return u'battle.net繁忙，请稍后再试。'
     except KeyError, ke:
         return rtnString
     except Exception, e:
