@@ -7,6 +7,7 @@ import os
 from lxml import etree
 import rex
 import cmd
+import logsql
 
 class WeixinInterface:
  
@@ -68,4 +69,5 @@ class WeixinInterface:
             sayString = cmd.cmdHeroItem(fromUser, commandType)
         else :
             sayString = u'恕在下未能领会大侠的神意图。这位可敬的涅法雷姆，您可以输入help或者?便可知在下能为您做些什么。非常愿意为您效劳。'
+            cmd.cmdUnknown(fromUser, content)
         return self.render.reply_text(fromUser,toUser,int(time.time()), sayString)

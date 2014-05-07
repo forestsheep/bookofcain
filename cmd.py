@@ -100,3 +100,14 @@ def cmdHeroItem(fromUser, itemId):
     finally:
         cursor.close()
         conn.close()
+
+def cmdUnknown(fromUser, content):
+    try:
+        conn=MySQLdb.connect(host=sae.const.MYSQL_HOST, user=sae.const.MYSQL_USER, passwd=sae.const.MYSQL_PASS, db=sae.const.MYSQL_DB, port=int(sae.const.MYSQL_PORT), charset='utf8')
+        cursor=conn.cursor()
+        n = sqlquery.saveUnknownCommand(cursor, fromUser, content)
+    except Exception,e:
+        pass
+    finally:
+        cursor.close()
+        conn.close()

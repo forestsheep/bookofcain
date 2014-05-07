@@ -49,3 +49,9 @@ def selectLastHero(cursor, weixin_id):
     prm =(weixin_id)
     rows = mysqlconn.select(cursor, sql, prm)
     return rows
+
+def saveUnknownCommand(cursor, weixin_id, content):
+    sql = "insert into `unknown_cmd`(`weixin_id`,`command`) values (%s, %s)"
+    prm = (weixin_id, content)
+    rows = mysqlconn.execute(cursor, sql, prm)
+    return rows
