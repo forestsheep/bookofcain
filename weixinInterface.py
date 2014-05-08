@@ -8,6 +8,7 @@ from lxml import etree
 import rex
 import cmd
 import logsql
+import sqlquery
 
 class WeixinInterface:
  
@@ -41,6 +42,7 @@ class WeixinInterface:
         if msgType == 'event':
             event=xml.find("Event").text
             if event == 'subscribe':
+                sqlquery.addOneUser()
                 return self.render.reply_text(fromUser,toUser,int(time.time()), u'欢迎关注。输入自己的battlenet TAG查询英雄。输入help或者?获得帮助。开发阶段，功能有限，敬请谅解。')
         elif msgType == 'text':
             try:
@@ -69,6 +71,6 @@ class WeixinInterface:
             sayString = cmd.cmdHeroItem(fromUser, commandType)
         else :
             sayString = u'恕在下未能领会大侠的神意图。这位可敬的涅法雷姆，您可以输入help或者?便可知在下能为您做些什么。非常愿意为您效劳。'
-            sayString = sayString + '\n' + rex.knownBadCommand(content)
+            sayString = sayString + rex.knownBadCommand(content)
             cmd.cmdUnknown(fromUser, content)
         return self.render.reply_text(fromUser,toUser,int(time.time()), sayString)

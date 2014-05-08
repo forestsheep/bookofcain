@@ -1,5 +1,7 @@
 #coding:UTF-8
 import sys
+import sae.const
+import MySQLdb
 import mysqlconn
 import logsql
 
@@ -55,3 +57,10 @@ def saveUnknownCommand(cursor, weixin_id, content):
     prm = (weixin_id, content)
     rows = mysqlconn.execute(cursor, sql, prm)
     return rows
+
+def addOneUser():
+    conn=MySQLdb.connect(host=sae.const.MYSQL_HOST, user=sae.const.MYSQL_USER, passwd=sae.const.MYSQL_PASS, db=sae.const.MYSQL_DB, port=int(sae.const.MYSQL_PORT), charset='utf8')
+    cursor=conn.cursor()
+    sql = "update `user_info` set `amount` = `amount` + 1 where `name` = %s"
+    prm = ('user_amount')
+    rows = mysqlconn.execute(cursor, sql, prm)
