@@ -10,7 +10,9 @@ def echoHeroStatus(statusDict):
                   {'coldResist':u'冷防'},
                   {'lightningResist':u'電防'},
                   {'arcaneResist':u'秘防'},
-                  {'poisonResist':u'毒防'})
+                  {'poisonResist':u'毒防'},
+                  {'lifeOnHit':u'擊回'},
+                  {'lifePerKill':u'殺回'})
     rtn = ''
     for i in range(len(outputKeys)):
         dict1 = outputKeys[i]

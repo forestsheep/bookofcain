@@ -20,13 +20,15 @@ def echoHeroDetail(battlenettagString, region, hreoid):
         heroclass = resultJson.get(u'class')
         herolv = str(resultJson.get(u'level'))
         killsDict = resultJson.get(u'kills')
+        modeBool = resultJson.get(u'hardcore')
         paragonInt = resultJson.get(u'paragonLevel')
         o = heroname + ' [' + heroclass + '] [' + herolv + ']'
+        o = stringutil.appendLines(o, u'模式:' + ('hardcore' if modeBool else 'softcore'))
         o = stringutil.appendLines(o, u'巔峰等級:' + str(paragonInt))
-        o = stringutil.appendLines(o, herostatus.echoHeroStatus(herodetail))
         if u'elites' in killsDict:
             elitesKill = str(killsDict[u'elites'])
             o = stringutil.appendLines(o, u'精英擊殺:' + elitesKill)
+        o = stringutil.appendLines(o, herostatus.echoHeroStatus(herodetail))
         return o
     except Exception, e:
         logsql.log('echoHeroDetail Error:' + str(e))
