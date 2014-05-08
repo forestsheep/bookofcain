@@ -20,11 +20,13 @@ def echoHeroDetail(battlenettagString, region, hreoid):
         heroclass = resultJson.get(u'class')
         herolv = str(resultJson.get(u'level'))
         killsDict = resultJson.get(u'kills')
+        paragonInt = resultJson.get(u'paragonLevel')
         o = heroname + ' [' + heroclass + '] [' + herolv + ']'
+        o = stringutil.appendLines(o, u'巔峰等級:' + str(paragonInt))
         o = stringutil.appendLines(o, herostatus.echoHeroStatus(herodetail))
         if u'elites' in killsDict:
             elitesKill = str(killsDict[u'elites'])
-            o = stringutil.appendLines(o, u'精英击杀:' + elitesKill)
+            o = stringutil.appendLines(o, u'精英擊殺:' + elitesKill)
         return o
     except Exception, e:
         logsql.log('echoHeroDetail Error:' + str(e))
@@ -34,7 +36,7 @@ def echoHeroDetail(battlenettagString, region, hreoid):
 
 def echoYourHeroes(cursor, battlenettagString):
     # 先删除现有英雄
-    error = sqlquery_t.delHeroes(cursor, battlenettagString)
+    error = sqlquery.delHeroes(cursor, battlenettagString)
     rtnString = ''
     try:
         rtnString = echoYourHeroesByServer(cursor, battlenettagString, 'tw', u'亚服')

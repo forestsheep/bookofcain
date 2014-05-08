@@ -2,13 +2,13 @@
 import stringutil
 
 def echoHeroStatus(statusDict):
-    outputKeys = ({'damage':u'伤害'},
-                  {'armor':u'护甲'},
+    outputKeys = ({'damage':u'傷害'},
+                  {'armor':u'護甲'},
                   {'life':u'生命'},
                   {'physicalResist':u'物防'},
                   {'fireResist':u'火防'},
                   {'coldResist':u'冷防'},
-                  {'lightningResist':u'电防'},
+                  {'lightningResist':u'電防'},
                   {'arcaneResist':u'秘防'},
                   {'poisonResist':u'毒防'})
     rtn = ''
