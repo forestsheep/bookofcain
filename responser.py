@@ -219,6 +219,14 @@ def echoHeroItem(battlenettagString, region, hreoid, itemId):
             passiveList = attributesDict[u'passive']
             for passiveItemDict in passiveList:
                 rtnString = stringutil.appendLines(rtnString, '   ' + passiveItemDict[u'text'])
+        attributesRawDict = resultItemJson[u'attributesRaw']
+        socketMinInt = 0
+        if u'Sockets' in attributesRawDict:
+            socketsDict = attributesRawDict[u'Sockets']
+            socketMinInt = int(socketsDict[u'min'])
+        emptySocketInt = socketMinInt - len(gemList)
+        for socketCount in range(0, emptySocketInt):
+            rtnString = stringutil.appendLines(rtnString, u'○ 空的鑲孔' )
         if u'flavorText' in resultItemJson:
             flavorString = resultItemJson[u'flavorText']
             rtnString = stringutil.appendLines(rtnString, flavorString)
