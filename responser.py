@@ -227,6 +227,28 @@ def echoHeroItem(battlenettagString, region, hreoid, itemId):
         emptySocketInt = socketMinInt - len(gemList)
         for socketCount in range(0, emptySocketInt):
             rtnString = stringutil.appendLines(rtnString, u'○ 空的鑲孔' )
+        if u'set' in resultItemJson:
+            setDict = resultItemJson[u'set']
+            setNameString = setDict[u'name']
+            rtnString = stringutil.appendLines(rtnString, setNameString)
+            setItemList = setDict[u'items']
+            for setItemDict in setItemList:
+                setItemNameString = setItemDict[u'name']
+                rtnString = stringutil.appendLines(rtnString, '    ' + setItemNameString)
+            setRankList = setDict[u'ranks']
+            for setRankDict in setRankList:
+                requiredString = str(setRankDict[u'required'])
+                rtnString = stringutil.appendLines(rtnString, '(' + requiredString + u')件')
+                rankAttributeDict = setRankDict[u'attributes']
+                atbPrimaryList = rankAttributeDict[u'primary']
+                for primaryDict in atbPrimaryList:
+                    rtnString = stringutil.appendLines(rtnString, '    ' + primaryDict[u'text'])
+                atbSecondaryList = rankAttributeDict[u'secondary']
+                for secondaryDict in atbSecondaryList:
+                    rtnString = stringutil.appendLines(rtnString, '    ' + secondaryDict[u'text'])
+                atbpassiveList = rankAttributeDict[u'passive']
+                for passiveDict in atbpassiveList:
+                    rtnString = stringutil.appendLines(rtnString, '    ' + passiveDict[u'text'])
         if u'flavorText' in resultItemJson:
             flavorString = resultItemJson[u'flavorText']
             rtnString = stringutil.appendLines(rtnString, flavorString)
