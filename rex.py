@@ -20,6 +20,10 @@ def commando(command):
     matchEquip = ptnHelpEquip.match(command)
     if matchEquip:
         return 901
+    ptnLeaveMessage = re.compile(r'^(?i)m\s*(?u).*$')
+    matchLeaveMessage = ptnLeaveMessage.match(command)
+    if matchLeaveMessage:
+        return 902
     ptnBnTag = re.compile(r'(?u)\w+#\d+')
     matchBnTag = ptnBnTag.match(command)
     if matchBnTag:
@@ -32,6 +36,10 @@ def commando(command):
     matchSkill = ptnSkill.match(command)
     if matchSkill:
         return 3
+    ptnHeroes = re.compile(ur'^(?i)heroes$|^(?i)hs$')
+    matchHeroes = ptnHeroes.match(command)
+    if matchHeroes:
+        return 4
     ptnItemHead = re.compile(ur'^(?i)head$|^头部{0,1}$|^头{0,1}盔$|^頭$|^帽子{0,1}$')
     matchItemHead = ptnItemHead.match(command)
     if matchItemHead:
@@ -90,5 +98,7 @@ def knownBadCommand(command):
     ptnBigSharp = re.compile(ur'(?u)\w+＃\d+')
     matchBigSharp = ptnBigSharp.match(command)
     if matchBigSharp:
-        return u'您很有可能输入的是全角的#，导致无法检索到正确的账号信息。'
+        return u'\n您很有可能输入的是全角的#，导致无法检索到正确的账号信息。'
+    else:
+        return ''
     

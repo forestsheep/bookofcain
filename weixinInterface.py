@@ -43,7 +43,7 @@ class WeixinInterface:
             event=xml.find("Event").text
             if event == 'subscribe':
                 sqlquery.addOneUser()
-                return self.render.reply_text(fromUser,toUser,int(time.time()), u'欢迎关注。输入自己的battlenet TAG查询英雄。输入help或者?获得帮助。开发阶段，功能有限，敬请谅解。')
+                return self.render.reply_text(fromUser,toUser,int(time.time()), u'欢迎关注。输入自己的battlenet TAG查询英雄。然后可查询技能或者装备。具体命令可输入help或者?获得帮助。')
         elif msgType == 'text':
             try:
                 content=xml.find("Content").text
@@ -61,12 +61,16 @@ class WeixinInterface:
             sayString = cmd.cmdHelp()
         elif commandType == 901 :
             sayString = cmd.cmdHelpEquip()
+        elif commandType == 902 :
+            sayString = cmd.cmdSaveLeaveMessage(fromUser, content)
         elif commandType == 1 :
             sayString = cmd.cmdBntag(fromUser, content)
         elif commandType == 2 :
             sayString = cmd.cmdHeroSeq(fromUser, content)
         elif commandType == 3 :
             sayString = cmd.cmdHeroSkill(fromUser)
+        elif commandType == 4 :
+            sayString = cmd.cmdHeroList(fromUser)
         elif commandType > 100 and commandType < 200 :
             sayString = cmd.cmdHeroItem(fromUser, commandType)
         else :

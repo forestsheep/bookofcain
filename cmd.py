@@ -5,10 +5,18 @@ import MySQLdb
 import responser
 import sqlquery
 import logsql
+import re
+
+host = 'w.rdc.sae.sina.com.cn'
+user = 'zyml0k1x5l'
+passwd = '130wllw1h3h03w0i1j0ii52jk1hw1y13j0yzk43i'
+db = 'app_d3bookofcain'
+port = 3307
 
 def cmdHelp():
     rtnString = u'查询英雄列表：输入battle net tag，例：小明#7456\n'
-    rtnString = rtnString + u'查询英雄状态：输入英雄列表前的编号\n'
+    rtnString = rtnString + u'再次列出英雄列表：heroes 或者 hs\n'
+    rtnString = rtnString + u'查询英雄状态：输入英雄列表前的编号 (纯数字)\n'
     rtnString = rtnString + u'技能查询：skill 或者 build (须在英雄查询完之后)\n'
     rtnString = rtnString + u'装备查询：身体部位名称 (须在英雄查询完之后，具体查询命令可以输入“equip”或者“装备”来获得帮助)'
     return rtnString
@@ -65,6 +73,21 @@ def cmdBntag(fromUser, content):
         cursor.close()
         conn.close()
 
+def cmdHeroList(fromUser):
+    try:
+        conn=MySQLdb.connect(host=sae.const.MYSQL_HOST, user=sae.const.MYSQL_USER, passwd=sae.const.MYSQL_PASS, db=sae.const.MYSQL_DB, port=int(sae.const.MYSQL_PORT), charset='utf8')
+        cursor=conn.cursor()
+        bntag = sqlquery.selectLastBntag(cursor, fromUser)
+        if bntag == None or bntag == '' :
+            return u'未找到您最后查询的账号'
+        else :
+            return responser.echoYourHeroes(cursor, bntag.encode('UTF-8'))
+    except Exception,e:
+        logsql.writeLog(cursor, 'cmdBntag Error:' + str(e) + content)
+    finally:
+        cursor.close()
+        conn.close()
+
 def cmdHeroSkill(fromUser):
     try:
         conn=MySQLdb.connect(host=sae.const.MYSQL_HOST, user=sae.const.MYSQL_USER, passwd=sae.const.MYSQL_PASS, db=sae.const.MYSQL_DB, port=int(sae.const.MYSQL_PORT), charset='utf8')
@@ -108,6 +131,26 @@ def cmdUnknown(fromUser, content):
         n = sqlquery.saveUnknownCommand(cursor, fromUser, content)
     except Exception,e:
         pass
+    finally:
+        cursor.close()
+        conn.close()
+def cmdSaveLeaveMessage(fromUser, cmdContent):
+    try:
+        conn=MySQLdb.connect(host=sae.const.MYSQL_HOST, user=sae.const.MYSQL_USER, passwd=sae.const.MYSQL_PASS, db=sae.const.MYSQL_DB, port=int(sae.const.MYSQL_PORT), charset='utf8')
+        cursor=conn.cursor()
+        errorMessage = u'您输入的格式不正确。正确的留言格式是：m+空格+留言内容'
+        ptnLeaveMessage = re.compile(r'^(?i)m\s+((?u).*)$')
+        matchLeaveMessage = ptnLeaveMessage.match(cmdContent)
+        if matchLeaveMessage:
+            leaveMessageString = matchLeaveMessage.group(1)
+            if leaveMessageString == '':
+                return errorMessage
+            n = sqlquery.saveLeaveMessage(cursor, fromUser, leaveMessageString)
+            return u'您的留言已经收到。谢谢！'
+        else:
+            return errorMessage
+    except Exception, e:
+		return e
     finally:
         cursor.close()
         conn.close()

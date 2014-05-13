@@ -64,3 +64,17 @@ def addOneUser():
     sql = "update `user_info` set `amount` = `amount` + 1 where `name` = %s"
     prm = ('user_amount')
     rows = mysqlconn.execute(cursor, sql, prm)
+def selectLastBntag(cursor, weixin_id):
+    sql = "select `last_bntag`.`battlenet_tag` from `last_bntag` where `last_bntag`.`weixin_id` = %s"
+    prm = (weixin_id)
+    rows = mysqlconn.select(cursor, sql, prm)
+    try:
+        return rows[0][0]
+    except IndexError, ie:
+        return ''
+
+def saveLeaveMessage(cursor, weixin_id, message):
+    sql = "insert into `leave_message`(`weixin_id`, `message`) values (%s, %s)"
+    prm = (weixin_id, message)
+    rows = mysqlconn.execute(cursor, sql, prm)
+    return rows
