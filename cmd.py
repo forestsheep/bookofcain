@@ -150,7 +150,7 @@ def cmdSaveLeaveMessage(fromUser, cmdContent):
         else:
             return errorMessage
     except Exception, e:
-		return e
+        return u'出错啦 - -|||'
     finally:
         cursor.close()
         conn.close()
