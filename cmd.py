@@ -18,7 +18,8 @@ def cmdHelp():
     rtnString = rtnString + u'再次列出英雄列表：heroes 或者 hs\n'
     rtnString = rtnString + u'查询英雄状态：输入英雄列表前的编号 (纯数字)\n'
     rtnString = rtnString + u'技能查询：skill 或者 build (须在英雄查询完之后)\n'
-    rtnString = rtnString + u'装备查询：身体部位名称 (须在英雄查询完之后，具体查询命令可以输入“equip”或者“装备”来获得帮助)'
+    rtnString = rtnString + u'装备查询：身体部位名称 (须在英雄查询完之后，具体查询命令可以输入“equip”或者“装备”来获得帮助)\n'
+    rtnString = rtnString + u'留言：m+空格+留言内容'
     return rtnString
 
 def cmdHelpEquip():
