@@ -14,7 +14,7 @@ db = 'app_d3bookofcain'
 port = 3307
 
 def cmdHelp():
-    rtnString = u'查询英雄列表：输入battle net tag，例：小明#7456\n'
+    rtnString = u'查询英雄列表：输入battle tag，例：小明#7456\n'
     rtnString = rtnString + u'再次列出英雄列表：heroes 或者 hs\n'
     rtnString = rtnString + u'查询英雄状态：输入英雄列表前的编号 (纯数字)\n'
     rtnString = rtnString + u'技能查询：skill 或者 build (须在英雄查询完之后)\n'
