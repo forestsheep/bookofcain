@@ -6,12 +6,8 @@ import responser
 import sqlquery
 import logsql
 import re
+import langconv
 
-host = 'w.rdc.sae.sina.com.cn'
-user = 'zyml0k1x5l'
-passwd = '130wllw1h3h03w0i1j0ii52jk1hw1y13j0yzk43i'
-db = 'app_d3bookofcain'
-port = 3307
 
 def cmdHelp():
     rtnString = u'查询英雄列表：输入battle tag，例：小明#7456\n'
@@ -19,6 +15,8 @@ def cmdHelp():
     rtnString = rtnString + u'查询英雄状态：输入英雄列表前的编号 (纯数字)\n'
     rtnString = rtnString + u'技能查询：skill 或者 build (须在英雄查询完之后)\n'
     rtnString = rtnString + u'装备查询：身体部位名称 (须在英雄查询完之后，具体查询命令可以输入“equip”或者“装备”来获得帮助)\n'
+    rtnString = rtnString + u'简体转繁体：tof+空格+内容\n'
+    rtnString = rtnString + u'繁体转简体：toj+空格+内容\n'
     rtnString = rtnString + u'留言：m+空格+留言内容'
     return rtnString
 
@@ -155,3 +153,25 @@ def cmdSaveLeaveMessage(fromUser, cmdContent):
     finally:
         cursor.close()
         conn.close()
+
+def cmdToj(cmdContent):
+    ptnZhConvertj = re.compile(r'^(?i)toj\s*((?u).*)$')
+    matchZhConvertj = ptnZhConvertj.match(cmdContent)
+    if matchZhConvertj:
+        convString = matchZhConvertj.group(1)
+        if convString == '':
+            return u'您输入的内容为空'
+        else:
+            convString = langconv.Converter('zh-hans').convert(convString)
+            return convString
+
+def cmdTof(cmdContent):
+    ptnZhConvertf = re.compile(r'^(?i)tof\s*((?u).*)$')
+    matchZhConvertf = ptnZhConvertf.match(cmdContent)
+    if matchZhConvertf:
+        convString = matchZhConvertf.group(1)
+        if convString == '':
+            return u'您输入的内容为空'
+        else:
+            convString = langconv.Converter('zh-hant').convert(convString)
+            return convString

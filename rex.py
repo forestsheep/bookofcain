@@ -24,6 +24,14 @@ def commando(command):
     matchLeaveMessage = ptnLeaveMessage.match(command)
     if matchLeaveMessage:
         return 902
+    ptnZhConvertj = re.compile(r'^(?i)toj\s*(?u).*$')
+    matchZhConvertj = ptnZhConvertj.match(command)
+    if matchZhConvertj:
+        return 921
+    ptnZhConvertf = re.compile(r'^(?i)tof\s*(?u).*$')
+    matchZhConvertf = ptnZhConvertf.match(command)
+    if matchZhConvertf:
+        return 922
     ptnBnTag = re.compile(r'(?u)\w+#\d+')
     matchBnTag = ptnBnTag.match(command)
     if matchBnTag:

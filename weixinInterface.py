@@ -63,6 +63,10 @@ class WeixinInterface:
             sayString = cmd.cmdHelpEquip()
         elif commandType == 902 :
             sayString = cmd.cmdSaveLeaveMessage(fromUser, content)
+        elif commandType == 921 :
+            sayString = cmd.cmdToj(content)
+        elif commandType == 922 :
+            sayString = cmd.cmdTof(content)
         elif commandType == 1 :
             sayString = cmd.cmdBntag(fromUser, content)
         elif commandType == 2 :
