@@ -5,14 +5,10 @@ import sae
 import web
 
 from weixinInterface import WeixinInterface
-from test import Test   
-from webtest import WebTest
 
 urls = (
     '/', 'Hello',  
-    '/weixin','WeixinInterface',
-    '/test','Test',
-    '/webtest','WebTest'
+    '/weixin','WeixinInterface'
 )
 
 app_root = os.path.dirname(__file__)

@@ -44,3 +44,31 @@ def getItemKey(itemid):
         return itemDict[itemString]
     else :
         return None
+
+def getClassId(className):
+    classDict = {
+        'barbarian':1,
+        'crusader':2,
+        'demon-hunter':3,
+        'monk':4,
+        'witch-doctor':5,
+        'wizard':6,
+    }
+    try:
+        id = classDict[className]
+        return id
+    except:
+        return -1
+
+def getRegionName(regionId):
+    regionDict = {
+        'kr':u'亞服',
+        'tw':u'亞服',
+        'us':u'美服',
+        'eu':u'歐服'
+    }
+    try:
+        id = regionDict[regionId]
+        return id
+    except:
+        return u'未知服'

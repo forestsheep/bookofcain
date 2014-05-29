@@ -17,10 +17,16 @@ def delHeroes(cursor, bntag):
     rows = mysqlconn.execute(cursor, sql, prm)
     return rows
 
-def saveHeroes(cursor, bntag, bnRegion, heroNo):
-    sql = "insert into `heroes`(`seq_id`,`battlenet_tag`,`bn_region`,`hero`) values ((select ct from(SELECT count(battlenet_tag) as ct FROM `heroes` WHERE battlenet_tag=%s) as tmp)+1,%s,%s,%s)"
-    prm = (bntag,bntag,bnRegion,heroNo)
+def saveHeroes(cursor, bntag, bnRegion, heroNo, heroName, classId, level):
+    sql = "insert into `heroes`(`seq_id`,`battlenet_tag`,`bn_region`,`hero`, `hero_name`, `class_id`, `level`) values ((select ct from(SELECT count(battlenet_tag) as ct FROM `heroes` WHERE battlenet_tag=%s) as tmp)+1,%s,%s,%s,%s,%s,%s)"
+    prm = (bntag, bntag, bnRegion, heroNo, heroName, classId, level)
     rows = mysqlconn.execute(cursor, sql, prm)
+    return rows
+
+def getHeroes(cursor, bntag):
+    sql = "select `heroes`.`seq_id`, `heroes`.`hero_name`, `class`.`name_zh`, `heroes`.`level`, `heroes`.`bn_region` from `heroes`, `class` WHERE battlenet_tag=%s and `class`.`id` = `heroes`.`class_id` order by `heroes`.`seq_id`"
+    prm = (bntag)
+    rows = mysqlconn.select(cursor, sql, prm)
     return rows
 
 def getHeroesSeq(cursor, bntag, bnRegion, heroNo):

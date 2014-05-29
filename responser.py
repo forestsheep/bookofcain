@@ -11,7 +11,7 @@ import httperror
 def echoHeroDetail(battlenettagString, region, hreoid):
     try:
         httpClient = httplib.HTTPConnection(region + '.battle.net', 80, timeout=30)
-        httpClient.request('GET','/api/d3/profile/' + battlenettagString.replace('#','-') + '/hero/' + hreoid)
+        httpClient.request('GET','/api/d3/profile/' + battlenettagString.replace('#','-') + '/hero/' + hreoid + '?locale=Zh_CN')
         response = httpClient.getresponse()
         jsonString = response.read()
         resultJson = json.loads(jsonString)
@@ -41,13 +41,25 @@ def echoYourHeroes(cursor, battlenettagString):
     error = sqlquery.delHeroes(cursor, battlenettagString)
     rtnString = ''
     try:
-        rtnString = echoYourHeroesByServer(cursor, battlenettagString, 'tw', u'亚服')
+        rtnString = echoYourHeroesByServer(cursor, battlenettagString, 'kr', u'亚服')
         usString = echoYourHeroesByServer(cursor, battlenettagString, 'us', u'美服')
         rtnString = stringutil.appendLines(rtnString, usString)
         euString = echoYourHeroesByServer(cursor, battlenettagString, 'eu', u'欧服')
         rtnString = stringutil.appendLines(rtnString, euString)
+        rtnString = ''
+        heroesTuple = sqlquery.getHeroes(cursor, battlenettagString)
+        for heroRow in heroesTuple:
+            heroId = heroRow[0]
+            heroName = heroRow[1]
+            heroClass = heroRow[2]
+            heroLv = heroRow[3]
+            heroRegionId = heroRow[4]
+            heroRegionName = herostatus.getRegionName(heroRegionId)
+            rtnString = stringutil.appendLines(rtnString, str(heroId) + ' ' + heroName + ' ' + heroRegionName + str(heroLv) + u'級' + heroClass)
     except httperror.HttpError, he:
         return u'battle.net繁忙，请稍后再试。'
+    except Exception, e:
+        return str(e)
     if rtnString != '':
         rtnString = stringutil.appendLines(rtnString, u'输入编号查询英雄状态')
     else:
@@ -70,7 +82,11 @@ def echoYourHeroesByServer(cursor, battlenettagString, region, regionName):
             heroList = resultJson.get(u'heroes')
             for i in range(len(heroList)):
                 heroid = heroList[i].get(u'id')
-                error = sqlquery.saveHeroes(cursor, battlenettagString, region, heroid)
+                heroName = heroList[i].get(u'name')
+                heroClass = heroList[i].get('class')
+                heroLv = heroList[i].get('level')
+                heroClassId = herostatus.getClassId(heroClass)
+                error = sqlquery.saveHeroes(cursor, battlenettagString, region, heroid, heroName, heroClassId, heroLv)
                 res = sqlquery.getHeroesSeq(cursor, battlenettagString, region, heroid)
                 rtnString = rtnString + '\n' +str(res[0][0]) + ') ' + heroList[i].get(u'name') + u' ' + heroList[i].get('class') + u' lv' + str(heroList[i].get('level'))
         elif errorcode == u'NOTFOUND':
@@ -88,7 +104,7 @@ def echoYourHeroesByServer(cursor, battlenettagString, region, regionName):
 def echoHeroSkills(battlenettagString, region, hreoid):
     try:
         httpClient = httplib.HTTPConnection(region + '.battle.net', 80, timeout=30)
-        httpClient.request('GET','/api/d3/profile/' + battlenettagString.replace('#','-') + '/hero/' + hreoid)
+        httpClient.request('GET','/api/d3/profile/' + battlenettagString.replace('#','-') + '/hero/' + hreoid + '?locale=Zh_CN')
         response = httpClient.getresponse()
         if response.status != 200:
             raise httperror.HttpError('not 200')
@@ -127,7 +143,7 @@ def echoHeroItem(battlenettagString, region, hreoid, itemId):
     rtnString = None
     try:
         httpClient = httplib.HTTPConnection(region + '.battle.net', 80, timeout=30)
-        httpClient.request('GET','/api/d3/profile/' + battlenettagString.replace('#','-') + '/hero/' + hreoid)
+        httpClient.request('GET','/api/d3/profile/' + battlenettagString.replace('#','-') + '/hero/' + hreoid + '?locale=Zh_CN')
         responseHero = httpClient.getresponse()
         if responseHero.status != 200:
             raise httperror.HttpError('not 200')
@@ -137,7 +153,7 @@ def echoHeroItem(battlenettagString, region, hreoid, itemId):
         itemDict = itemsDict[herostatus.getItemKey(itemId)]
         tooptipString = itemDict[u'tooltipParams']
         
-        httpClient.request('GET','/api/d3/data/' + tooptipString)
+        httpClient.request('GET','/api/d3/data/' + tooptipString + '?locale=Zh_CN')
         responseItem = httpClient.getresponse()
         if responseItem.status != 200:
             raise httperror.HttpError('not 200')
