@@ -7,6 +7,8 @@ import sqlquery
 import logsql
 import herostatus
 import httperror
+import bs4
+import urllib2
 
 def echoHeroDetail(battlenettagString, region, hreoid):
     try:
@@ -278,6 +280,26 @@ def echoHeroItem(battlenettagString, region, hreoid, itemId):
     finally:
         if httpClient:
             httpClient.close()
+
+def echoHeroRank(battlenettagString, heroId, heroName):
+    bntagString = battlenettagString.replace('#','-')
+    pageString = "http://www.diabloprogress.com/hero/" + bntagString + "/" + heroName + "/" + heroId
+    page = urllib2.urlopen(url = pageString, data = 'update=1')
+    page = urllib2.urlopen(pageString)
+    soup = bs4.BeautifulSoup(page)
+    fd = soup.findAll(attrs={'style':'background-color:#1C1C1C;padding:10px;margin-top:7px;margin-right:2px'})
+    lastCheckedKeyString = 'Last Checked: '
+    fdLastCheckedTag = soup.find(text = lastCheckedKeyString).findNext('dd')
+    rtnString = ''
+    for item in fd:
+        ch = item.children
+        for i in ch:
+            try:
+                rtnString = stringutil.appendLines(rtnString, i.text)
+            except:
+                pass
+    rtnString = stringutil.appendLines(rtnString, lastCheckedKeyString + fdLastCheckedTag.text)
+    return rtnString
 
 def echoAff(itemDict):
     affString = itemDict[u'affixType']

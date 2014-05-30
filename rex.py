@@ -100,6 +100,10 @@ def commando(command):
     matchItemFeet = ptnItemFeet.match(command)
     if matchItemFeet:
         return 113
+    ptnRank = re.compile(ur'^(?i)rank$|^排名$')
+    matchRank = ptnRank.match(command)
+    if matchRank:
+        return 201
     return -1
 
 def knownBadCommand(command):

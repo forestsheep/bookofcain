@@ -58,6 +58,12 @@ def selectLastHero(cursor, weixin_id):
     rows = mysqlconn.select(cursor, sql, prm)
     return rows
 
+def selectLastHeroWithName(cursor, weixin_id):
+    sql = "select `heroes`.`battlenet_tag`, `heroes`.`hero`, `heroes`.`hero_name` from `heroes`,`last_bntag` where `last_bntag`.`weixin_id` = %s and `last_bntag`.`battlenet_tag` = `heroes`.`battlenet_tag` and `heroes`.`last_visited`"
+    prm =(weixin_id)
+    rows = mysqlconn.select(cursor, sql, prm)
+    return rows
+
 def saveUnknownCommand(cursor, weixin_id, content):
     sql = "insert into `unknown_cmd`(`weixin_id`,`command`) values (%s, %s)"
     prm = (weixin_id, content)

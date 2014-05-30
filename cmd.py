@@ -123,6 +123,24 @@ def cmdHeroItem(fromUser, itemId):
         cursor.close()
         conn.close()
 
+def cmdHeroRnak(fromUser):
+    try:
+        conn=MySQLdb.connect(host=sae.const.MYSQL_HOST, user=sae.const.MYSQL_USER, passwd=sae.const.MYSQL_PASS, db=sae.const.MYSQL_DB, port=int(sae.const.MYSQL_PORT), charset='utf8')
+        cursor=conn.cursor()
+        n = sqlquery.selectLastHeroWithName(cursor, fromUser)
+        if len(n) == 0:
+            return u'您还未选择过英雄'
+        bnTag = n[0][0]
+        heroId = n[0][1]
+        heroName = n[0][2]
+        sayString = responser.echoHeroRank(bnTag.encode('UTF-8'), heroId.encode('UTF-8'), heroName.encode('UTF-8'))
+        return sayString
+    except Exception,e:
+        logsql.writeLog(cursor, 'cmdHeroRank Error:' + str(e))
+    finally:
+        cursor.close()
+        conn.close()
+
 def cmdUnknown(fromUser, content):
     try:
         conn=MySQLdb.connect(host=sae.const.MYSQL_HOST, user=sae.const.MYSQL_USER, passwd=sae.const.MYSQL_PASS, db=sae.const.MYSQL_DB, port=int(sae.const.MYSQL_PORT), charset='utf8')

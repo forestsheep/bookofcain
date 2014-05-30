@@ -51,6 +51,7 @@ class WeixinInterface:
                 return
             finally:
                 pass
+
         # 对content进行trim
         content = content.strip()
         # 对content进行分析，如果是battle net tag，则保存，并显示英雄列表。
@@ -67,6 +68,14 @@ class WeixinInterface:
             sayString = cmd.cmdToj(content)
         elif commandType == 922 :
             sayString = cmd.cmdTof(content)
+        elif commandType == 700 :
+            sayString = cmd.cmdAdminHelp()
+        elif commandType == 701 :
+            sayString = cmd.cmdUserAmount()
+        elif commandType == 702 :   
+            sayString = cmd.cmdaddUserAmount(content)
+        elif commandType == 703 :   
+            sayString = cmd.cmdEchoLeaveMessage(content)
         elif commandType == 1 :
             sayString = cmd.cmdBntag(fromUser, content)
         elif commandType == 2 :
@@ -77,6 +86,8 @@ class WeixinInterface:
             sayString = cmd.cmdHeroList(fromUser)
         elif commandType > 100 and commandType < 200 :
             sayString = cmd.cmdHeroItem(fromUser, commandType)
+        elif commandType == 201 :
+            sayString = cmd.cmdHeroRnak(fromUser)
         else :
             sayString = u'恕在下未能领会大侠的神意图。这位可敬的涅法雷姆，您可以输入help或者?便可知在下能为您做些什么。非常愿意为您效劳。'
             sayString = sayString + rex.knownBadCommand(content)
