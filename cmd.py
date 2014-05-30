@@ -15,6 +15,7 @@ def cmdHelp():
     rtnString = rtnString + u'查询英雄状态：输入英雄列表前的编号 (纯数字)\n'
     rtnString = rtnString + u'技能查询：skill 或者 build (须在英雄查询完之后)\n'
     rtnString = rtnString + u'装备查询：身体部位名称 (须在英雄查询完之后，具体查询命令可以输入“equip”或者“装备”来获得帮助)\n'
+    rtnString = rtnString + u'排名查询：rank 或者 排名\n'
     rtnString = rtnString + u'简体转繁体：tof+空格+内容\n'
     rtnString = rtnString + u'繁体转简体：toj+空格+内容\n'
     rtnString = rtnString + u'留言：m+空格+留言内容'
