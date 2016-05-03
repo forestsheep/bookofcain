@@ -11,26 +11,27 @@ import logsql
 import sqlquery
 
 class WeixinInterface:
- 
+
     def __init__(self):
         self.app_root = os.path.dirname(__file__)
         self.templates_root = os.path.join(self.app_root, 'templates')
         self.render = web.template.render(self.templates_root)
-     
+
     def GET(self):
-        data = web.input()      # 获取输入参数  
-        signature = data.signature  
-        timestamp = data.timestamp  
-        nonce = data.nonce  
-        echostr = data.echostr  
-        token="dorabmon"             # 自己的token  
-        list=[token,timestamp,nonce]    # 字典序排序  
-        list.sort()  
-        sha1=hashlib.sha1()             # sha1加密算法  
-        map(sha1.update, list)  
-        hashcode=sha1.hexdigest()  
-        if hashcode == signature:       # 如果是来自微信的请求，则回复echostr  
-            return echostr              # print "true"  
+        return 'fff'
+        data = web.input()      # 获取输入参数
+        signature = data.signature
+        timestamp = data.timestamp
+        nonce = data.nonce
+        echostr = data.echostr
+        token="dorabmon"             # 自己的token
+        list=[token,timestamp,nonce]    # 字典序排序
+        list.sort()
+        sha1=hashlib.sha1()             # sha1加密算法
+        map(sha1.update, list)
+        hashcode=sha1.hexdigest()
+        if hashcode == signature:       # 如果是来自微信的请求，则回复echostr
+            return echostr              # print "true"
 
     def POST(self):
         str_xml=web.data()
@@ -38,6 +39,7 @@ class WeixinInterface:
         msgType=xml.find("MsgType").text
         fromUser=xml.find("FromUserName").text
         toUser=xml.find("ToUserName").text
+        # return self.render.reply_text(fromUser,toUser,int(time.time()), u'服务维护中')
         content=''
         if msgType == 'event':
             event=xml.find("Event").text
@@ -72,9 +74,9 @@ class WeixinInterface:
             sayString = cmd.cmdAdminHelp()
         elif commandType == 701 :
             sayString = cmd.cmdUserAmount()
-        elif commandType == 702 :   
+        elif commandType == 702 :
             sayString = cmd.cmdaddUserAmount(content)
-        elif commandType == 703 :   
+        elif commandType == 703 :
             sayString = cmd.cmdEchoLeaveMessage(content)
         elif commandType == 1 :
             sayString = cmd.cmdBntag(fromUser, content)

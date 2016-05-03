@@ -63,7 +63,7 @@ def cmdBntag(fromUser, content):
         sayString = responser.echoYourHeroes(cursor, content.encode('UTF-8'))
         # logsql.writeLog(cursor, sayString)
         if sayString == '' :
-            sayString = u'没找到您的账号，请确认您的战网TAG'
+            sayString = u'没找到您的账号，请确认输入的是正确的战网TAG(暂不支持国服，不是我不做，是国服没这功能，去找丁三石)'
         else :
             sqlquery.saveLastQuery(cursor, fromUser, content)
         return sayString;
@@ -164,7 +164,7 @@ def cmdSaveLeaveMessage(fromUser, cmdContent):
             if leaveMessageString == '':
                 return errorMessage
             n = sqlquery.saveLeaveMessage(cursor, fromUser, leaveMessageString)
-            return u'您的留言已经收到。谢谢！'
+            return u'您的留言已经收到。谢谢！如果您希望我回復，請留下您的聯繫方式。'
         else:
             return errorMessage
     except Exception, e:

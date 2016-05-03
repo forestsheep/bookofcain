@@ -3,6 +3,10 @@ import stringutil
 
 def echoHeroStatus(statusDict):
     outputKeys = ({'damage':u'傷害'},
+                  {'attackSpeed':u'攻速'},
+                  {'critDamage':u'爆傷'},
+                  {'critChance':u'爆率'}, 
+                  {'toughness':u'坚韧'},
                   {'armor':u'護甲'},
                   {'life':u'生命'},
                   {'physicalResist':u'物防'},

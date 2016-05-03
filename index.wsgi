@@ -1,13 +1,13 @@
-# coding: UTF-8  
+# coding: UTF-8
 import os
 
-import sae  
+import sae
 import web
 
 from weixinInterface import WeixinInterface
 
 urls = (
-    '/', 'Hello',  
+    '/', 'Hello',
     '/weixin','WeixinInterface'
 )
 
@@ -17,7 +17,7 @@ render = web.template.render(templates_root)
 
 class Hello:
    def GET(self):
-        return ("hello")
+        return ("<html><head><title>myfirst HTML</title></head><body><p>body</p><p>title will show</p></body></html>")
 
 app = web.application(urls, globals()).wsgifunc()
 application = sae.create_wsgi_app(app)

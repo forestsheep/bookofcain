@@ -20,7 +20,7 @@ def commando(command):
     matchEquip = ptnHelpEquip.match(command)
     if matchEquip:
         return 901
-    ptnLeaveMessage = re.compile(r'^(?i)m\s*(?u).*$')
+    ptnLeaveMessage = re.compile(r'^(?i)m\s+(?u).*$')
     matchLeaveMessage = ptnLeaveMessage.match(command)
     if matchLeaveMessage:
         return 902
